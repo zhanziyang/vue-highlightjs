@@ -5,6 +5,7 @@ module.exports = {
     ],
     "rules": {
         "strict": [0, "global"],
-        "no-var": "off"
+        "no-var": "off",
+        "global-require": "off"
     }
 };

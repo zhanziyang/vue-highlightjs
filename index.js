@@ -1,17 +1,25 @@
 'use strict';
 
-var hljs = require('highlight.js');
-// import hljs from 'highlight.js';
-
+var hljs;
 var vueHighlightJS = {};
-vueHighlightJS.install = function install(Vue) {
+vueHighlightJS.install = function install(Vue, langs) {
+  if (langs && Array.isArray(langs)) {
+    // import hljs from 'highlight.js' and register only the needed languages.
+    var i;
+    hljs = require('highlight.js/lib/highlight.js');
+    for (i = 0; i < langs.length; i += 1) {
+      hljs.registerLanguage(langs[i], require('highlight.js/lib/languages/' + langs[i]));
+    }
+  } else {
+    // import hljs from 'highlight.js' and register all languages.
+    hljs = require('highlight.js');
+  }
   Vue.directive('highlightjs', {
     deep: true,
     bind: function bind(el, binding) {
       // on first bind, highlight all targets
       var targets = el.querySelectorAll('code');
       var target;
-      var i;
 
       for (i = 0; i < targets.length; i += 1) {
         target = targets[i];
@@ -29,7 +37,6 @@ vueHighlightJS.install = function install(Vue) {
       // after an update, re-fill the content and then highlight
       var targets = el.querySelectorAll('code');
       var target;
-      var i;
 
       for (i = 0; i < targets.length; i += 1) {
         target = targets[i];
